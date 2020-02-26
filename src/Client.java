@@ -79,8 +79,8 @@ public class Client {
                 out.writeUTF(filename);
                 String l;
                 while (scan.hasNextLine()) {
-                    l = scan.nextLine() + "\n";
-                    System.out.println(l);
+                    l = scan.nextLine();
+                    //System.out.println(l);
                     out.writeUTF(l);
 
                 }
@@ -96,7 +96,7 @@ public class Client {
     }
 
     public Client() {
-        // establish a connection 
+        // establish a connection
         try {
 
             Scanner input = new Scanner(System.in);
@@ -116,11 +116,14 @@ public class Client {
             // takes input from terminal
             String termInput;
             server = new DataInputStream(socket.getInputStream());
-            // sends output to the socket 
+            // sends output to the socket
             out = new DataOutputStream(socket.getOutputStream());
-
+            System.out.println("______________________________________________________________");
+            System.out.println("ENTER A COMMAND:");
 
             while (!(termInput = input.nextLine()).equals("QUIT")) {
+
+
                 out.writeUTF(termInput);
 
                 if(termInput.contains("RETRIEVE")) {
@@ -131,61 +134,68 @@ public class Client {
                 }else if(termInput.contains("STORE")){
                     String [] a = termInput.split("\\s+");
                     returnFile(a[1],out);
-                    System.out.println(a[1]);
+                    //System.out.println(a[1]);
 
                 }
-
+                if(termInput.equals("TERMINATE")){
+                    //out.writeUTF(termInput);
+                    System.exit(0);
+                }
+                System.out.println("______________________________________________________________");
+                System.out.println("ENTER A COMMAND:");
 
 
             }
             socket.close();
             out.close();
-            out.writeUTF(termInput);
+            //out.writeUTF(termInput);
 
 
-        } catch (UnknownHostException u) {
-            System.out.println(u);
-        } catch (IOException i) {
-            System.out.println(i);
+        } catch (Exception u) {
+            System.out.println("An error occurred connecting to the server, please try again.");
+            //System.out.println(u);
+
         }
 
 
 
 
-        // string to read message from input 
+        // string to read message from input
         //String line = "";
 
         // keep reading until "Over" is input
 
 
-        // close the connection 
-        try {
-            // input.close();
-            out.close();
-            socket.close();
-        } catch (IOException i) {
-            System.out.println(i);
-        }
-        String in;
-        while (true) {
-            try {
-                in = server.readUTF();
-                if (input.equals("Hey")) {
-                    System.out.println("");
-                    break;
-                }
-            } catch (IOException e) {
+        // close the connection
+        // try {
+        //     // input.close();
+        //     out.close();
+        //     socket.close();
 
-            }
-        }
+        // } catch (IOException i) {
+        //     System.out.println(i);
+
+        // }
+        // String in;
+        // while (true) {
+        //     try {
+        //         in = server.readUTF();
+        //         if (input.equals("Hey")) {
+        //             System.out.println("");
+
+        //         }
+        //     } catch (IOException e) {
+
+        //     }
+        // }
 
     }
     public static void main(String args[]) {
-        System.out.println("To Connect to a server, enter 'CONNECT' followed by the IP and server port");
-        while (true) {
 
+        while (true) {
+            System.out.println("To Connect to a server, enter 'CONNECT' followed by the IP and server port");
             Client client = new Client();
         }
 
     }
-} 
+}

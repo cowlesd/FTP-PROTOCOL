@@ -50,11 +50,14 @@ public class Server
 
                 }
                 if (line.contains("STORE")) {
-                    out.writeUTF(line.substring(line.indexOf(" ")));
+                    //out.writeUTF(line.substring(line.indexOf(" ")));
                     recieve();
                 }
+                if(line.contains("TERMINATE")) {
+                    System.exit(0);
+                }
 
-                System.out.println(line);
+
 
 //                }
 //                catch(IOException i)
@@ -70,7 +73,7 @@ public class Server
         }
         catch(IOException i)
         {
-
+            //System.out.println(i);
         }
     }
 
@@ -78,25 +81,25 @@ public class Server
     {
         Server server;
         while (true) {
-            server = new Server(8533);
-            System.out.println("Closing connection");
+            server = new Server(8433);
+
         }
     }
     public void listFiles(DataOutputStream out) throws IOException{
-        File dir = new File("ServerFiles");
+        File dir = new File("/Users/admin/Desktop/FTP-Protocol/src/ServerFiles");
 
         out.writeUTF("Select a file: \n");
         File [] list = dir.listFiles();
         for (File file : list) {
             System.out.println(file.getName());
-            out.writeUTF(file.getName() + '\n');
+            out.writeUTF(" -->" + file.getName() );
 
         }
         out.writeUTF("Over");
 
     }
     private void returnFile(String filename, DataOutputStream out) throws IOException {
-        File dir = new File("ServerFiles");
+        File dir = new File("/Users/admin/Desktop/FTP-Protocol/src/ServerFiles");
         File file = null;
         File [] list = dir.listFiles();
         for (File f: list) {
@@ -113,7 +116,7 @@ public class Server
                 out.writeUTF(filename);
                 while (scan.hasNextLine()) {
 
-                    out.writeUTF(scan.nextLine() + "\n");
+                    out.writeUTF(scan.nextLine());
 
                 }
                 out.writeUTF("Over");
@@ -124,13 +127,13 @@ public class Server
         } else {
             out.writeUTF("File not found");
         }
-        System.out.println("got here");
+
         //out.writeUTF("Over");
 
     }
     public void recieve(){
         String line = "";
-        System.out.println("1");
+
         try {
             String fileName ="";
 
@@ -142,9 +145,9 @@ public class Server
 
             while (!(line = in.readUTF()).equals("Over")) {
                 writer.println(line);
-                System.out.println(line);
+
             }
-            System.out.println("Finished");
+
             writer.close();
         } catch (IOException i) {
             System.out.println(i);
